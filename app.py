@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, url_for, render_template
+from flask import Flask, request, send_file, url_for, render_template, abort, redirect
 
 
 app = Flask(__name__)
@@ -31,7 +31,27 @@ def results():
 def index():
     return render_template("index3.html",
                            Title="Victor",
-                           info="I learn Jinja")
+                           info="I learn Djinja")
+
+
+#Эта часть не относиться к дз
+@app.post("/login/")
+def login():
+    user = request.form["name"]
+    if user == "admin":
+        return "Hello Admin"
+    else:
+        return redirect(url_for("login"), code=302)
+
+@app.get("/login/")
+def get_login():
+    return render_template("login.html")
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return "Page not found my darling", 404
+
 
 if __name__ == '__main__':
     app.run(port=5050, debug=True)
